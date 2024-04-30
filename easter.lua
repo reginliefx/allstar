@@ -1,151 +1,268 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Name = Instance.new("TextLabel")
+local UICorner_2 = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+local UICorner_3 = Instance.new("UICorner")
+local YugiAnimDeleter = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local Replacelaw = Instance.new("TextButton")
+local UICorner_5 = Instance.new("UICorner")
+local AutoLaw = Instance.new("TextButton")
+local UICorner_6 = Instance.new("UICorner")
+local TextLabel_2 = Instance.new("TextLabel")
+local UICorner_7 = Instance.new("UICorner")
+local TextLabel_3 = Instance.new("TextLabel")
+local UICorner_8 = Instance.new("UICorner")
+local TextLabel_4 = Instance.new("TextLabel")
+local UICorner_9 = Instance.new("UICorner")
+local TextBox = Instance.new("TextBox")
+local UICorner_10 = Instance.new("UICorner")
 
-local Window = Fluent:CreateWindow({
-    Title = "Fluent " .. Fluent.Version,
-    SubTitle = "by dawid",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
-})
+---- Ts local textbox bla bla
+local TextBoxTS = Instance.new("TextBox")
+local AutoTs = Instance.new("TextButton")
+local UICorner_TS = Instance.new("UICorner")
+local TextLabel_TS = Instance.new("TextLabel")
+local UICorner_TSS = Instance.new("UICorner")
+local UICorner_TSSS = Instance.new("UICorner")
 
---Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
-local Tabs = {
-    Main = Window:AddTab({ Title = "Main", Icon = "" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
-}
+-----
+local LocalPlayer = game.Players.LocalPlayer
+local GameId = game.GameId
+local Remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Input")
+local UserInputService = game:GetService("UserInputService")
 
-local Options = Fluent.Options
+--Properties:
 
-do
-    Fluent:Notify({
-        Title = "Notification",
-        Content = "This is a notification",
-        SubContent = "SubContent", -- Optional
-        Duration = 5 -- Set to nil to make the notification not disappear
-    })
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-    Tabs.Main:AddButton({
-        Title = "Tp to Easter Event",
-        Description = "Tp to easter",
-        Callback = function()
-            Window:Dialog({
-                Title = "TP",
-                Content = "Easter Event",
-                Buttons = {
-                    {
-                        Title = "Confirm",
-                        Callback = function()
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-69.0650711, 97.4366531, -2243.62183, 0.999944806, -1.05097655e-08, 0.0105053633, 9.60293356e-09, 1, 8.63712799e-08, -0.0105053633, -8.62656364e-08, 0.999944806)
-                        end
-                    },
-                    {
-                        Title = "Cancel",
-                        Callback = function()
-                            print("Cancelled the dialog.")
-                        end
-                    }
-                }
-            })
-        end
-    })
+--- เปลี่ยนกรอบ
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderColor3 = Color3.fromRGB(130, 203, 255)
+Frame.Position = UDim2.new(0.295644134, 0, 0.235759497, 0)
+Frame.Size = UDim2.new(0, 289, 0, 196)
+Frame.Draggable = true
 
-    local Keybind = Tabs.Main:AddKeybind("Keybind", {
-        Title = "KeyBind",
-        Mode = "Toggle", -- Always, Toggle, Hold
-        Default = "LeftControl", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+local function dragify(Frame)
+	local dragToggle = nil
+	local dragSpeed = 100000 -- You can edit this.
+	local dragInput = nil
+	local dragStart = nil
+	local dragPos = nil
 
-        -- Occurs when the keybind is clicked, Value is `true`/`false`
-        Callback = function(Value)
-            print("Keybind clicked!", Value)
-        end,
+	local function updateInput(input)
+		Delta = input.Position - dragStart
+		Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+		game:GetService("TweenService"):Create(Frame, TweenInfo.new(0), {Position = Position}):Play()
+	end
 
-        -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
-        ChangedCallback = function(New)
-            print("Keybind changed!", New)
-        end
-    })
+	Frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+			dragToggle = true
+			dragStart = input.Position
+			startPos = Frame.Position
+			input.Changed:Connect(function()
+				if (input.UserInputState == Enum.UserInputState.End) then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
 
-    -- OnClick is only fired when you press the keybind and the mode is Toggle
-    -- Otherwise, you will have to use Keybind:GetState()
-    Keybind:OnClick(function()
-        print("Keybind clicked:", Keybind:GetState())
-    end)
+	Frame.InputChanged:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+			dragInput = input
+		end
+	end)
 
-    Keybind:OnChanged(function()
-        print("Keybind changed:", Keybind.Value)
-    end)
-
-    task.spawn(function()
-        while true do
-            wait(1)
-
-            -- example for checking if a keybind is being pressed
-            local state = Keybind:GetState()
-            if state then
-                print("Keybind is being held down")
-            end
-
-            if Fluent.Unloaded then break end
-        end
-    end)
-
-    Keybind:SetValue("MB2", "Toggle") -- Sets keybind to MB2, mode to Hold
-
-
-    local Input = Tabs.Main:AddInput("Input", {
-        Title = "Input",
-        Default = "Default",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Value)
-            print("Input changed:", Value)
-        end
-    })
-
-    Input:OnChanged(function()
-        print("Input updated:", Input.Value)
-    end)
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if (input == dragInput and dragToggle) then
+			updateInput(input)
+		end
+	end)
 end
 
+dragify(Frame)
 
--- Addons:
--- SaveManager (Allows you to have a configuration system)
--- InterfaceManager (Allows you to have a interface managment system)
+UICorner.Parent = Frame
 
--- Hand the library over to our managers
-SaveManager:SetLibrary(Fluent)
-InterfaceManager:SetLibrary(Fluent)
+Name.Name = "Name"
+Name.Parent = Frame
+Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Name.BackgroundTransparency = 0
+Name.BorderColor3 = Color3.fromRGB(80, 255, 243)
+Name.Position = UDim2.new(-0.0054210, 0, -0.107142858, 0)
+Name.Size = UDim2.new(0, 289, 0, 21)
+Name.Font = Enum.Font.Arcade
+Name.Text = "ASTD Hack, for LBs."
+Name.TextColor3 = Color3.fromRGB(0, 0, 0)
+Name.TextSize = 23.000
+Name.TextXAlignment = Enum.TextXAlignment.Right
 
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
-SaveManager:IgnoreThemeSettings()
+UICorner_2.CornerRadius = UDim.new(0, 20)
+UICorner_2.Parent = Name
 
--- You can add indexes of elements the save manager should ignore
-SaveManager:SetIgnoreIndexes({})
-
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
-InterfaceManager:SetFolder("FluentScriptHub")
-SaveManager:SetFolder("FluentScriptHub/specific-game")
-
-InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-SaveManager:BuildConfigSection(Tabs.Settings)
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.Position = UDim2.new(0.425979182, 0, 0.888775539, 0)
+TextLabel.Size = UDim2.new(0, 51, 0, 12)
+TextLabel.Font = Enum.Font.Arcade
+TextLabel.Text = "Original By Chef. | Modify By Nagi"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 14.000
 
 
-Window:SelectTab(1)
+--Auto Law
 
-Fluent:Notify({
-    Title = "Fluent",
-    Content = "The script has been loaded.",
-    Duration = 8
-})
+AutoLaw.Name = "AutoLaw"
+AutoLaw.Parent = Frame
+AutoLaw.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+AutoLaw.Position = UDim2.new(0.8304497, 0, 0.367346942, 0)
+AutoLaw.Size = UDim2.new(0, 29, 0, 32)
+AutoLaw.Font = Enum.Font.Arcade
+AutoLaw.Text = ""
+AutoLaw.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoLaw.TextSize = 30.000
 
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
-SaveManager:LoadAutoloadConfig()
+UICorner_6.Parent = AutoLaw
+
+TextLabel_4.Parent = Frame
+TextLabel_4.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_4.Position = UDim2.new(0.0346020758, 0, 0.367346942, 0)
+TextLabel_4.Size = UDim2.new(0, 200, 0, 32)
+TextLabel_4.Font = Enum.Font.Arcade
+TextLabel_4.Text = "Auto Laws."
+TextLabel_4.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_4.TextSize = 25.000
+
+UICorner_9.Parent = TextLabel_4
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(235, 255, 10)
+TextBox.Position = UDim2.new(0.653979123, 0, 0.367346942, 0)
+TextBox.Size = UDim2.new(0, 29, 0, 32)
+TextBox.Font = Enum.Font.Arcade
+TextBox.PlaceholderColor3 = Color3.fromRGB(16, 135, 178)
+TextBox.Text = "Q"
+TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.TextScaled = true
+TextBox.TextSize = 14.000
+TextBox.TextWrapped = true
+
+UICorner_10.Parent = TextBox
+
+---AUTO TS
+
+AutoTs.Name = "AutoTs"
+AutoTs.Parent = Frame
+AutoTs.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+AutoTs.Position = UDim2.new(0.8304497, 0, 0.099346942, 0)
+AutoTs.Size = UDim2.new(0, 29, 0, 32)
+AutoTs.Font = Enum.Font.Arcade
+AutoTs.Text = ""
+AutoTs.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoTs.TextSize = 45.000
+
+UICorner_TS.Parent = AutoTs
+
+TextLabel_TS.Parent = Frame
+TextLabel_TS.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_TS.Position = UDim2.new(0.0346020758, 0, 0.107142858, 0)
+TextLabel_TS.Size = UDim2.new(0, 200, 0, 32)
+TextLabel_TS.Font = Enum.Font.Arcade
+TextLabel_TS.Text = "Auto Ts."
+TextLabel_TS.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_TS.TextSize = 30.000
+
+UICorner_TSS.Parent = TextLabel_TS
+
+TextBoxTS.Parent = Frame
+TextBoxTS.BackgroundColor3 = Color3.fromRGB(235, 255, 10)
+TextBoxTS.Position = UDim2.new(0.653979123, 0, 0.099346942, 0)
+TextBoxTS.Size = UDim2.new(0, 29, 0, 32)
+TextBoxTS.Font = Enum.Font.Arcade
+TextBoxTS.PlaceholderColor3 = Color3.fromRGB(16, 135, 178)
+TextBoxTS.Text = "F"
+TextBoxTS.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextBoxTS.TextScaled = true
+TextBoxTS.TextSize = 14.000
+TextBoxTS.TextWrapped = true
+
+UICorner_TSSS.Parent = TextBox
+
+--YUGI ANIM 
+
+YugiAnimDeleter.Name = "YugiAnimDeleter"
+YugiAnimDeleter.Parent = Frame
+YugiAnimDeleter.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+YugiAnimDeleter.Position = UDim2.new(0.8304497, 0, 0.607142858, 0)
+YugiAnimDeleter.Size = UDim2.new(0, 29, 0, 32)
+YugiAnimDeleter.Font = Enum.Font.SourceSans
+YugiAnimDeleter.Text = ""
+YugiAnimDeleter.TextColor3 = Color3.fromRGB(0, 0, 0)
+YugiAnimDeleter.TextSize = 14.000
+
+UICorner_4.Parent = YugiAnimDeleter
+
+TextLabel_2.Parent = Frame
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.Position = UDim2.new(0.0846020758, 0, 0.607142858, 0)
+TextLabel_2.Size = UDim2.new(0, 200, 0, 32)
+TextLabel_2.Font = Enum.Font.Arcade
+TextLabel_2.Text = "Yugi Animation Delete."
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.TextSize = 15.000
+
+UICorner_7.Parent = TextLabel_2
+
+
+
+-- local
+
+local IsAutoLaw = false
+local IsAutoTs = false
+local YugiValues = nil
+
+--Yugi Deletes
+
+YugiAnimDeleter.MouseButton1Down:Connect(function()
+	if IsYugiAnim then
+		IsYugiAnim = false
+		YugiValues = nil
+		YugiAnimDeleter.BackgroundColor3 = Color3.new(1, 0, 0)
+	else
+		IsYugiAnim = true
+		YugiAnimDeleter.BackgroundColor3 = Color3.new(0, 1, 0)
+		YugiValues = game:GetService("Workspace"):WaitForChild("Camera"):WaitForChild("Exodia")
+		if YugiValues then
+			YugiValues:Destroy()
+		end
+	end
+end)
+
+
+-- TS
+AutoTs.MouseButton1Down:Connect(function()
+	if IsAutoTs then
+		IsAutoTs = false
+		AutoTs.BackgroundColor3 = Color3.new(1, 0, 0)
+	else
+		IsAutoTs = true
+		AutoTs.BackgroundColor3 = Color3.new(0, 1, 0)
+	end
+end)
+
+	UserInputService.InputBegan:Connect(function(input, gameprocesses)
+		if not gameprocesses then
+			if input.UserInputType == Enum.UserInputType.Keyboard then
+				if input.KeyCode == Enum.KeyCode[TextBoxTS.Text] then
+ 				      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-69.0650711, 97.4366531, -2243.62183, 0.999944806, -1.05097655e-08, 0.0105053633, 9.60293356e-09, 1, 8.63712799e-08, -0.0105053633, -8.62656364e-08, 0.999944806)
+				end
+			end
+		end
+	end)
+
