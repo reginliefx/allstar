@@ -260,28 +260,7 @@ end)
 		if not gameprocesses then
 			if input.UserInputType == Enum.UserInputType.Keyboard then
 				if input.KeyCode == Enum.KeyCode[TextBoxTS.Text] then
-				       function tweenAF2Pageaaa(gotoCFrame)
-    pcall(function()
-        game.Players.LocalPlayer.Character.Humanoid.Sit = false
-    end)
-    if (game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.Position - gotoCFrame.Position).Magnitude <= 150 then
-        pcall(function() 
-            tween:Cancel()
-        end)
-        game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.CFrame = gotoCFrame
-    else
-        local tween_s = game:service"TweenService"
-        local info = TweenInfo.new((game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.Position - gotoCFrame.Position).Magnitude/300, Enum.EasingStyle.Linear)
-        local tween, err = pcall(function()
-            tween = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], info, {CFrame = gotoCFrame})
-            tween:Play()
-        end)
-        if not tween then return err end
-    end
-end
-
-tweenAF2Pageaaa(CFrame.new((-69.0650711, 97.4366531, -2243.62183, 0.999944806, -1.05097655e-08, 0.0105053633, 9.60293356e-09, 1, 8.63712799e-08, -0.0105053633, -8.62656364e-08, 0.999944806)))
- 				     
+ 				      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-69.0650711, 97.4366531, -2243.62183, 0.999944806, -1.05097655e-08, 0.0105053633, 9.60293356e-09, 1, 8.63712799e-08, -0.0105053633, -8.62656364e-08, 0.999944806)
 				end
 			end
 		end
